@@ -10,7 +10,6 @@ var app = express();
 
 //Setting-up the post routing: 
 app.use(bodyParser.json());
-
 app.post('/todos', (req,res) => 
 {
 
@@ -27,6 +26,18 @@ app.post('/todos', (req,res) =>
     res.status(400).send(e);
   });
 });
+
+//Seeting up GET route:
+
+app.get('/todos', (req,res) => 
+{
+  Todo.find().then((todos) => {
+    res.send({todos});
+  }, (err) => {
+    res.status(400).send(err)
+  })
+});
+
 
 app.listen(3000, () => {
   console.log('Server is up on port 3000');
