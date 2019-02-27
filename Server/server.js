@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 //Creating express app:
 var app = express();
 
+var port = process.env.PORT || 3000;
 //Setting-up the post routing: 
 app.use(bodyParser.json());
 app.post('/todos', (req,res) => 
@@ -59,8 +60,8 @@ app.get('/todos/:id', (req,res) =>
      }).catch((e) => res.status(400));
 
 });
-app.listen(3000, () => {
-  console.log('Server is up on port 3000');
+app.listen(port, () => {
+  console.log(`The server is up on port ${port}`);
 });
 
 module.exports = {app}
