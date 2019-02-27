@@ -9,7 +9,10 @@ const todo = [{
     text: 'first todo'
 },
 {
-    text: 'second todo'
+    _id: new ObjectID(),
+    text: 'second todo',
+    completed: true,
+    completedAt: false
 }];
 beforeEach((done) =>
 {
@@ -150,4 +153,40 @@ describe('DELETE /todos/:id', ()=>
         .expect(404)
         .end(done)
     });
+});
+
+//Testing PATCH route :
+describe('PATCH /todos/:id', ()=> 
+{
+    it('It should update todo', (done) =>
+    {
+        const id = todo[0]._id;
+        const text = 'Learning something new';
+        request(app)
+        .patch(`/todos/${id}`)
+        .send({
+            text,
+            completed: true
+        })
+        .expect(200)
+        .expect(res =>
+        {
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(true);
+            expect(res.body.todo.completedAt).toBeA('number');
+        })
+        .end(done);
+    });
+    it('It should clear completedAt when todo is not completed', (done)=>
+    {
+        request(app)
+        .patch(`/todos/${todo[1]._id}`)
+        .send({completed: false})
+        .expect(200)
+        .expect(res =>
+         {
+             expect(res.body.todo.completedAt).toNotExist();
+         })
+         .end(done);
+    })
 });
