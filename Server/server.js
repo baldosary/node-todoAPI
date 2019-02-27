@@ -60,6 +60,30 @@ app.get('/todos/:id', (req,res) =>
      }).catch((e) => res.status(400));
 
 });
+//Setting up the delete route:
+app.delete('/todos/:id', (req,res) => 
+{
+    //Get Id:
+    var id = req.params.id;
+    //validate the id
+    if(!ObjectID.isValid(id))
+    {
+      //not valid: return 404
+       return res.status(404).send();
+    }
+    //Remove todo byId 
+     //success
+      //if no docs: return 404
+      //if docs send the doc back with 200
+    //error 
+     //send back 400 with empty body
+     Todo.findByIdAndRemove(id).then((todo) => 
+     {
+       if(!todo) return res.status(404).send();
+       res.send({todo});
+     }).catch((e) => res.status(400).send());
+    
+}) ;
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);
 });
