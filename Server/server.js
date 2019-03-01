@@ -4,6 +4,7 @@ var {User} = require('./models/user');
 var {Todo} = require('./models/todo');
 var {ObjectID} = require('mongodb');
 var _=require('lodash');
+var {authenticate} = require('./../middlewares/authentciation');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -122,9 +123,18 @@ app.post('/users', (req,res) =>
   {
     return user.generateAuthToken();
   }).then((token) => res.header('x-auth',token).send(user)).catch((e) => res.status(400).send(e));
-})
+});
+
+app.get('/user/me', authenticate, (req,res) =>
+{
+      res.send(req.user);
+});
 app.listen(port, () => {
   console.log(`The server is up on port ${port}`);
+});
+app.get('/users/me', (req,res) => 
+{
+   
 });
 
 module.exports = {app}
